@@ -23,6 +23,8 @@ Node {
     property real doorBRAngle: 0
     // 后备箱开合角度（供外部动画驱动）
     property real trunkAngle: 0
+    // 前车轮转向角度（供slider驱动，90=直行，70=左满舵，110=右满舵）
+    property real wheelSteeringAngle: 90
 
     // Resources
 
@@ -41,7 +43,7 @@ Node {
                 y: -943.5015258789062
                 eulerRotation.z: -90
                 eulerRotation.y: -90
-                eulerRotation.x: 90
+                eulerRotation.x: node.wheelSteeringAngle
                 z: 379.3494567871094
                 scale.x: 1
                 scale.y: 1
@@ -250,7 +252,7 @@ Node {
                 y: 950.2604370117188
                 eulerRotation.z: -90
                 eulerRotation.y: -90
-                eulerRotation.x: 90
+                eulerRotation.x: node.wheelSteeringAngle
                 z: 379.3494567871094
                 scale.x: 1
                 scale.y: 1

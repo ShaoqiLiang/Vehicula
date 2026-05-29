@@ -557,9 +557,9 @@ Window {
                 font.pixelSize: 14
                 iconSize: Qt.point(16, 16)
 
-                // onClicked: {
-                //     wheelRow.visible = !wheelRow.visible
-                // }
+                onClicked: {
+                    wheelRow.visible = !wheelRow.visible
+                }
             }
         }
         Row {
@@ -796,6 +796,7 @@ Window {
                 to: 110
                 stepSize: 1
                 value: 90
+                onMoved: liXiang_L9.wheelSteeringAngle = value
             }
 
             Label {text: wheelSlider.value; color: "white"}

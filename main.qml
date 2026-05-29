@@ -82,6 +82,58 @@ Window {
                 onStarted: console.log("左前门关闭动画开始")
                 onFinished: console.log("左前门关闭动画完成")
             }
+
+            // 右前门开启动画
+            NumberAnimation {
+                id: doorFROnAnimation
+                target: liXiang_L9
+                property: "doorFRAngle"
+                from: 0
+                to: 60
+                duration: 1000
+                easing.type: Easing.InOutQuad
+                onStarted: console.log("右前门开启动画开始")
+                onFinished: console.log("右前门开启动画完成")
+            }
+
+            // 右前门关闭动画
+            NumberAnimation {
+                id: doorFROffAnimation
+                target: liXiang_L9
+                property: "doorFRAngle"
+                from: 60
+                to: 0
+                duration: 1000
+                easing.type: Easing.InOutQuad
+                onStarted: console.log("右前门关闭动画开始")
+                onFinished: console.log("右前门关闭动画完成")
+            }
+
+            // 左后门开启动画
+            NumberAnimation {
+                id: doorBLOnAnimation
+                target: liXiang_L9
+                property: "doorBLAngle"
+                from: 0
+                to: 60
+                duration: 1000
+                easing.type: Easing.InOutQuad
+                onStarted: console.log("左后门开启动画开始")
+                onFinished: console.log("左后门开启动画完成")
+            }
+
+            // 左后门关闭动画
+            NumberAnimation {
+                id: doorBLOffAnimation
+                target: liXiang_L9
+                property: "doorBLAngle"
+                from: 60
+                to: 0
+                duration: 1000
+                easing.type: Easing.InOutQuad
+                onStarted: console.log("左后门关闭动画开始")
+                onFinished: console.log("左后门关闭动画完成")
+            }
         }
 
         // WasdController 放在 View3D 内部
@@ -341,16 +393,21 @@ Window {
                 font.pixelSize: 14
                 iconSize: Qt.point(16, 16)
 
-                // onClicked: {
-                //     if(liXiangL9.doorBLStatus)
-                //     {
-                //         doorBLOffAnimation.start()
-                //     }
-                //     else
-                //     {
-                //         doorBLOnAnimation.start()
-                //     }
-                // }
+                onClicked: {
+                    console.log("左后门按钮被点击, 当前状态:", liXiang_L9.doorBLStatus)
+                    if(liXiang_L9.doorBLStatus)
+                    {
+                        console.log("执行左后门关门动画")
+                        doorBLOffAnimation.start()
+                        liXiang_L9.doorBLStatus = false
+                    }
+                    else
+                    {
+                        console.log("执行左后门开门动画")
+                        doorBLOnAnimation.start()
+                        liXiang_L9.doorBLStatus = true
+                    }
+                }
             }
             QuickButton {
                 id: doorFRButton
@@ -364,16 +421,21 @@ Window {
                 font.pixelSize: 14
                 iconSize: Qt.point(16, 16)
 
-                // onClicked: {
-                //     if(liXiangL9.doorBLStatus)
-                //     {
-                //         doorBLOffAnimation.start()
-                //     }
-                //     else
-                //     {
-                //         doorBLOnAnimation.start()
-                //     }
-                // }
+                onClicked: {
+                    console.log("右前门按钮被点击, 当前状态:", liXiang_L9.doorFRStatus)
+                    if(liXiang_L9.doorFRStatus)
+                    {
+                        console.log("执行右前门关门动画")
+                        doorFROffAnimation.start()
+                        liXiang_L9.doorFRStatus = false
+                    }
+                    else
+                    {
+                        console.log("执行右前门开门动画")
+                        doorFROnAnimation.start()
+                        liXiang_L9.doorFRStatus = true
+                    }
+                }
             }
             QuickButton {
                 id: doorBRButton

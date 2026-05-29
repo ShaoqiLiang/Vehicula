@@ -15,6 +15,10 @@ Node {
 
     // 左前门开合角度（供外部动画驱动）
     property real doorFLAngle: 0
+    // 右前门开合角度（供外部动画驱动）
+    property real doorFRAngle: 0
+    // 左后门开合角度（供外部动画驱动）
+    property real doorBLAngle: 0
 
     // Resources
 
@@ -764,13 +768,24 @@ Node {
                     }
                 }
             }
+            // 左后门旋转控制节点
             Node {
-                id: doorBL
-                objectName: "DoorBL"
+                id: doorBLRotator
+                objectName: "DoorBLRotator"
                 x: 97.53690338134766
                 y: -944.9375610351562
                 z: 749.7769165039062
-                rotation: Qt.quaternion(0.707107, 0.707107, -8.42937e-08, -8.42937e-08)
+
+                // 绕竖直轴旋转，角度由根节点 doorBLAngle 驱动
+                eulerRotation.z: -node.doorBLAngle
+
+                Node {
+                    id: doorBL
+                    objectName: "DoorBL"
+                    x: 0
+                    y: 0
+                    z: 0
+                    rotation: Qt.quaternion(0.707107, 0.707107, -8.42937e-08, -8.42937e-08)
                 Node {
                     id: liXiang_L9_DoorBL
                     objectName: "LiXiang_L9_DoorBL"
@@ -997,6 +1012,7 @@ Node {
                         }
                     }
                 }
+            }
             }
             // 左前门旋转控制节点
             Node {
@@ -1527,13 +1543,24 @@ Node {
                     }
                 }
             }
+            // 右前门旋转控制节点
             Node {
-                id: doorFR
-                objectName: "DoorFR"
+                id: doorFRRotator
+                objectName: "DoorFRRotator"
                 x: -1017.096435546875
                 y: 947.8298950195312
                 z: 749.7769165039062
-                rotation: Qt.quaternion(0.707107, 0.707107, 0, 0)
+
+                // 绕竖直轴旋转，角度由根节点 doorFRAngle 驱动
+                eulerRotation.z: node.doorFRAngle
+
+                Node {
+                    id: doorFR
+                    objectName: "DoorFR"
+                    x: 0
+                    y: 0
+                    z: 0
+                    rotation: Qt.quaternion(0.707107, 0.707107, 0, 0)
                 Node {
                     id: liXiang_L9_DoorFR
                     objectName: "LiXiang_L9_DoorFR"
@@ -1810,6 +1837,7 @@ Node {
                         }
                     }
                 }
+            }
             }
             Node {
                 id: interior

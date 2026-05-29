@@ -1,4 +1,4 @@
-import QtQuick
+﻿import QtQuick
 import QtQuick.Controls
 import QtQuick3D
 import QtQuick3D.Helpers
@@ -8,7 +8,7 @@ Window {
     width: 1920
     height: 1040
     visible: true
-    visibility: window.Maximized
+    visibility: Window.FullScreen
     title: qsTr("Vehicula  -by: ShaoqiLiang")
 
     View3D {
@@ -66,6 +66,17 @@ Window {
         }
     }
 
+    // Esc 退出全屏
+    Shortcut {
+        sequence: "Escape"
+        onActivated: {
+            if (visibility === Window.FullScreen)
+                visibility = Window.Windowed
+            else
+                visibility = Window.FullScreen
+        }
+    }
+
     // 信息显示
     Row {
         id: infoRow
@@ -98,13 +109,9 @@ Window {
         anchors.bottomMargin: 0       // 紧贴状态栏，不留缝隙
         anchors.left: parent.left
         Row {
-            id: leftWindRow
-            anchors.left: probeExposureRow.right
-            anchors.leftMargin: 5
-            anchors.verticalCenter: parent.verticalCenter
-            width: 70
-            height: 50
-            spacing: 5
+            id: acControlRow
+            anchors.centerIn: parent
+            spacing: 10
 
             QuickSliderBar {
                 id: leftWindSlider
@@ -125,18 +132,12 @@ Window {
                 rightSourceOff: "qrc:/images/rightSourceOff.png"
                 value: 3
             }
-        }
-        Row {
-            // 空调控制内容，水平居中
-            anchors.centerIn: parent
-            spacing: 10
 
             // ---- 左温区 ----
             Row {
                 id: leftTempRow
                 height: 50
                 spacing: 5
-                // 删除原来的 anchors.left / leftMargin，由父 Row 管理位置
 
                 Button {
                     width: 50; height: 50
@@ -231,35 +232,24 @@ Window {
                 }
             }
 
-            // ---- 右风量 ----
-            Row {
-                id: rightWindRow
-                anchors.left: rightTempRow.right
-                anchors.leftMargin: 5
+            QuickSliderBar {
+                id: rightWindSlider
+                width: 196
+                height: 30
                 anchors.verticalCenter: parent.verticalCenter
-                width: 70
-                height: 50
-                spacing: 5
 
-                QuickSliderBar {
-                    id: rightWindSlider
-                    width: 196
-                    height: 30
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    enabled: true
-                    visible: true
-                    opacity: enabled ? 1 : 0.3
-                    imageWidth: 28
-                    imageHeight: 8
-                    midelSourceOn: "qrc:/images/midelSourceOn.png"
-                    midelSourceOff: "qrc:/images/midelSourceOff.png"
-                    leftSourceOn: "qrc:/images/leftSourceOn.png"
-                    leftSourceOff: "qrc:/images/leftSourceOff.png"
-                    rightSourceOn: "qrc:/images/rightSourceOn.png"
-                    rightSourceOff: "qrc:/images/rightSourceOff.png"
-                    value: 3
-                }
+                enabled: true
+                visible: true
+                opacity: enabled ? 1 : 0.3
+                imageWidth: 28
+                imageHeight: 8
+                midelSourceOn: "qrc:/images/midelSourceOn.png"
+                midelSourceOff: "qrc:/images/midelSourceOff.png"
+                leftSourceOn: "qrc:/images/leftSourceOn.png"
+                leftSourceOff: "qrc:/images/leftSourceOff.png"
+                rightSourceOn: "qrc:/images/rightSourceOn.png"
+                rightSourceOff: "qrc:/images/rightSourceOff.png"
+                value: 3
             }
         }
     }
@@ -336,7 +326,7 @@ Window {
                 width: 65
                 height: 40
                 anchors.verticalCenter: parent.verticalCenter
-                buttonText: "右后门"
+                buttonText: "右前门"
                 buttonColor: "#80AAAAAA"
                 buttonSource: "qrc:/images/door.png"
                 textColor: "white"

@@ -5,9 +5,17 @@ import QtQuick3D.Helpers
 import "LiXiang_L9"
 
 Window {
+    id: root
     width: 1920
     height: 1040
     visible: true
+
+    // 环绕动画参数
+    property real orbitAngle: 0          // 当前角度
+    property real orbitRadius: 4000      // 环绕半径
+    property real orbitHeight: 800       // 环绕高度
+    property real orbitCenterX: 0        // 车中心X
+    property real orbitCenterZ: 500      // 车中心Z
     visibility: Window.FullScreen
     title: qsTr("Vehicula  -by: ShaoqiLiang")
 
@@ -287,6 +295,89 @@ Window {
 
                 onStarted: console.log("车身视角动画开始")
                 onFinished: console.log("车身视角动画完成")
+            }
+
+            // 环绕展示动画（平滑过渡 + 环绕一周）
+            // Phase 1: 平滑飞到轨道起点
+            ParallelAnimation {
+                id: orbitTransitionAnimation
+
+                NumberAnimation {
+                    id: orbitToX
+                    target: sceneCamera
+                    property: "x"
+                    duration: 1000
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    id: orbitToY
+                    target: sceneCamera
+                    property: "y"
+                    duration: 1000
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    id: orbitToZ
+                    target: sceneCamera
+                    property: "z"
+                    duration: 1000
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    id: orbitToRotX
+                    target: sceneCamera
+                    property: "eulerRotation.x"
+                    duration: 1000
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    id: orbitToRotY
+                    target: sceneCamera
+                    property: "eulerRotation.y"
+                    duration: 1000
+                    easing.type: Easing.InOutQuad
+                }
+
+                onFinished: {
+                    console.log("过渡完成，开始环绕")
+                    orbitOrbitAnimation.start()
+                }
+            }
+
+            // Phase 2: 环绕 360°
+            NumberAnimation {
+                id: orbitOrbitAnimation
+                target: root
+                property: "orbitAngle"
+                duration: 12000
+                easing.type: Easing.Linear
+
+                onStarted: {
+                    console.log("环绕开始，角度: " + root.orbitAngle.toFixed(1))
+                    orbitTimer.running = true
+                }
+                onStopped: {
+                    console.log("环绕结束")
+                    orbitTimer.running = false
+                }
+            }
+
+            // 环绕动画定时器（更新摄像机位置）
+            Timer {
+                id: orbitTimer
+                interval: 16  // ~60fps
+                repeat: true
+                running: false
+
+                onTriggered: {
+                    var angle = root.orbitAngle * Math.PI / 180
+                    sceneCamera.x = orbitCenterX + orbitRadius * Math.sin(angle)
+                    sceneCamera.z = orbitCenterZ + orbitRadius * Math.cos(angle)
+                    sceneCamera.y = orbitHeight
+                    sceneCamera.eulerRotation.x = -10
+                    sceneCamera.eulerRotation.y = root.orbitAngle
+                    sceneCamera.eulerRotation.z = 0
+                }
             }
         }
 
@@ -733,6 +824,9 @@ Window {
                 iconMagin: 3
 
                 onClicked: {
+                    orbitTransitionAnimation.stop()
+                    orbitOrbitAnimation.stop()
+                    orbitTimer.running = false
                     carBodyViewAnimation.start()
                 }
             }
@@ -760,7 +854,7 @@ Window {
                 width: 80
                 height: 40
                 anchors.verticalCenter: parent.verticalCenter
-                buttonText: "播放动画"
+                buttonText: (orbitTransitionAnimation.running || orbitOrbitAnimation.running) ? "停止动画" : "播放动画"
                 buttonColor: "#80AAAAAA"
                 buttonSource: "qrc:/images/animation.png"
                 textColor: "white"
@@ -768,9 +862,47 @@ Window {
                 iconSize: Qt.point(16, 16)
                 iconMagin: 3
 
-                // onClicked: {
-                //     sequentialAnimation.start()
-                // }
+                onClicked: {
+                    if(orbitTransitionAnimation.running || orbitOrbitAnimation.running)
+                    {
+                        // 停止所有动画
+                        orbitTransitionAnimation.stop()
+                        orbitOrbitAnimation.stop()
+                        orbitTimer.running = false
+                    }
+                    else
+                    {
+                        // 计算起始参数
+                        var dx = sceneCamera.x - orbitCenterX
+                        var dz = sceneCamera.z - orbitCenterZ
+                        var startAngle = Math.atan2(dx, dz) * 180 / Math.PI
+                        var currentRadius = Math.sqrt(dx * dx + dz * dz)
+
+                        // 设置轨道参数
+                        orbitHeight = sceneCamera.y
+                        orbitRadius = currentRadius > 500 ? currentRadius : 4000
+
+                        // 设置 Phase 1 目标：飞到轨道起点
+                        var targetAngleRad = startAngle * Math.PI / 180
+                        orbitToX.to = orbitCenterX + orbitRadius * Math.sin(targetAngleRad)
+                        orbitToY.to = orbitHeight
+                        orbitToZ.to = orbitCenterZ + orbitRadius * Math.cos(targetAngleRad)
+                        orbitToRotX.to = -10
+                        orbitToRotY.to = startAngle
+
+                        // 设置 Phase 2：从起始角度环绕 360°
+                        root.orbitAngle = startAngle
+                        orbitOrbitAnimation.from = startAngle
+                        orbitOrbitAnimation.to = startAngle + 360
+
+                        console.log("=== 环绕动画启动 ===")
+                        console.log("起始角度: " + startAngle.toFixed(1) + "°")
+                        console.log("轨道半径: " + orbitRadius.toFixed(0))
+
+                        // 启动 Phase 1
+                        orbitTransitionAnimation.start()
+                    }
+                }
             }
         }
         // 车漆

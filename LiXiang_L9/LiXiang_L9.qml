@@ -25,6 +25,8 @@ Node {
     property real trunkAngle: 0
     // 前车轮转向角度（供slider驱动，90=直行，70=左满舵，110=右满舵）
     property real wheelSteeringAngle: 90
+    // 车漆颜色（供外部颜色选择器驱动）
+    property color carPaintColor: "#ff001314"
 
     // Resources
 
@@ -4048,7 +4050,7 @@ Node {
         PrincipledMaterial {
             id: carpaint_green_material
             objectName: "carpaint_green"
-            baseColor: "#ff001314"
+            baseColor: node.carPaintColor
             roughness: 0.16335
         }
 

@@ -213,7 +213,7 @@ Window {
         anchors.left: parent.left
         anchors.leftMargin: 5
         anchors.top: parent.top
-        visible: false
+        visible: true
 
         Label {
             id: infoLabel
@@ -692,7 +692,7 @@ Window {
                 border.width: 1
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: liXiangL9.carPaintColor = parent.color
+                    onClicked: liXiang_L9.carPaintColor = parent.color
                 }
             }
 
@@ -705,7 +705,7 @@ Window {
                 border.width: 1
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: liXiangL9.carPaintColor = parent.color
+                    onClicked: liXiang_L9.carPaintColor = parent.color
                 }
             }
 
@@ -718,7 +718,7 @@ Window {
                 border.width: 1
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: liXiangL9.carPaintColor = parent.color
+                    onClicked: liXiang_L9.carPaintColor = parent.color
                 }
             }
 
@@ -731,7 +731,7 @@ Window {
                 border.width: 1
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: liXiangL9.carPaintColor = parent.color
+                    onClicked: liXiang_L9.carPaintColor = parent.color
                 }
             }
 
@@ -744,7 +744,7 @@ Window {
                 border.width: 1
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: liXiangL9.carPaintColor = parent.color
+                    onClicked: liXiang_L9.carPaintColor = parent.color
                 }
             }
         }

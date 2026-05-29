@@ -21,6 +21,8 @@ Node {
     property real doorBLAngle: 0
     // 右后门开合角度（供外部动画驱动）
     property real doorBRAngle: 0
+    // 后备箱开合角度（供外部动画驱动）
+    property real trunkAngle: 0
 
     // Resources
 
@@ -520,13 +522,24 @@ Node {
             //         }
             //     }
             // }
+            // 后备箱旋转控制节点
             Node {
-                id: trunk
-                objectName: "Trunk"
+                id: trunkRotator
+                objectName: "TrunkRotator"
                 x: 1978.380126953125
                 y: -7.571669993922114e-05
                 z: 1732.196533203125
-                rotation: Qt.quaternion(0.707107, 0.707107, -8.42937e-08, 8.42937e-08)
+
+                // 后备箱绕水平轴（Y轴）旋转，角度由根节点 trunkAngle 驱动
+                eulerRotation.y: -node.trunkAngle
+
+                Node {
+                    id: trunk
+                    objectName: "Trunk"
+                    x: 0
+                    y: 0
+                    z: 0
+                    rotation: Qt.quaternion(0.707107, 0.707107, -8.42937e-08, 8.42937e-08)
                 Node {
                     id: liXiang_L9_Trunk
                     objectName: "LiXiang_L9_Trunk"
@@ -769,6 +782,7 @@ Node {
                         ]
                     }
                 }
+            }
             }
             // 左后门旋转控制节点
             Node {

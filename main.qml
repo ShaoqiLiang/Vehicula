@@ -160,6 +160,32 @@ Window {
                 onStarted: console.log("右后门关闭动画开始")
                 onFinished: console.log("右后门关闭动画完成")
             }
+
+            // 后备箱开启动画
+            NumberAnimation {
+                id: trunkOnAnimation
+                target: liXiang_L9
+                property: "trunkAngle"
+                from: 0
+                to: 60
+                duration: 1000
+                easing.type: Easing.InOutQuad
+                onStarted: console.log("后备箱开启动画开始")
+                onFinished: console.log("后备箱开启动画完成")
+            }
+
+            // 后备箱关闭动画
+            NumberAnimation {
+                id: trunkOffAnimation
+                target: liXiang_L9
+                property: "trunkAngle"
+                from: 60
+                to: 0
+                duration: 1000
+                easing.type: Easing.InOutQuad
+                onStarted: console.log("后备箱关闭动画开始")
+                onFinished: console.log("后备箱关闭动画完成")
+            }
         }
 
         // WasdController 放在 View3D 内部
@@ -503,16 +529,21 @@ Window {
                 font.pixelSize: 14
                 iconSize: Qt.point(16, 16)
 
-                // onClicked: {
-                //     if(liXiangL9.trunkStatus)
-                //     {
-                //         trunkOffAnimation.start()
-                //     }
-                //     else
-                //     {
-                //         trunkOnAnimation.start()
-                //     }
-                // }
+                onClicked: {
+                    console.log("后备箱按钮被点击, 当前状态:", liXiang_L9.trunkStatus)
+                    if(liXiang_L9.trunkStatus)
+                    {
+                        console.log("执行后备箱关闭动画")
+                        trunkOffAnimation.start()
+                        liXiang_L9.trunkStatus = false
+                    }
+                    else
+                    {
+                        console.log("执行后备箱开启动画")
+                        trunkOnAnimation.start()
+                        liXiang_L9.trunkStatus = true
+                    }
+                }
             }
             QuickButton {
                 id: wheelFontButton

@@ -19,6 +19,8 @@ Node {
     property real doorFRAngle: 0
     // 左后门开合角度（供外部动画驱动）
     property real doorBLAngle: 0
+    // 右后门开合角度（供外部动画驱动）
+    property real doorBRAngle: 0
 
     // Resources
 
@@ -1310,13 +1312,24 @@ Node {
                 }
                 }
             }
+            // 右后门旋转控制节点
             Node {
-                id: doorBR
-                objectName: "DoorBR"
+                id: doorBRRotator
+                objectName: "DoorBRRotator"
                 x: 97.52601623535156
                 y: 947.8731079101562
                 z: 749.7769165039062
-                rotation: Qt.quaternion(0.707107, 0.707107, 0, 0)
+
+                // 绕竖直轴旋转，角度由根节点 doorBRAngle 驱动
+                eulerRotation.z: node.doorBRAngle
+
+                Node {
+                    id: doorBR
+                    objectName: "DoorBR"
+                    x: 0
+                    y: 0
+                    z: 0
+                    rotation: Qt.quaternion(0.707107, 0.707107, 0, 0)
                 Node {
                     id: liXiang_L9_DoorBR
                     objectName: "LiXiang_L9_DoorBR"
@@ -1542,6 +1555,7 @@ Node {
                         }
                     }
                 }
+            }
             }
             // 右前门旋转控制节点
             Node {

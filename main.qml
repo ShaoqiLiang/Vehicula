@@ -134,6 +134,32 @@ Window {
                 onStarted: console.log("左后门关闭动画开始")
                 onFinished: console.log("左后门关闭动画完成")
             }
+
+            // 右后门开启动画
+            NumberAnimation {
+                id: doorBROnAnimation
+                target: liXiang_L9
+                property: "doorBRAngle"
+                from: 0
+                to: 60
+                duration: 1000
+                easing.type: Easing.InOutQuad
+                onStarted: console.log("右后门开启动画开始")
+                onFinished: console.log("右后门开启动画完成")
+            }
+
+            // 右后门关闭动画
+            NumberAnimation {
+                id: doorBROffAnimation
+                target: liXiang_L9
+                property: "doorBRAngle"
+                from: 60
+                to: 0
+                duration: 1000
+                easing.type: Easing.InOutQuad
+                onStarted: console.log("右后门关闭动画开始")
+                onFinished: console.log("右后门关闭动画完成")
+            }
         }
 
         // WasdController 放在 View3D 内部
@@ -449,16 +475,21 @@ Window {
                 font.pixelSize: 14
                 iconSize: Qt.point(16, 16)
 
-                // onClicked: {
-                //     if(liXiangL9.doorBRStatus)
-                //     {
-                //         doorBROffAnimation.start()
-                //     }
-                //     else
-                //     {
-                //         doorBROnAnimation.start()
-                //     }
-                // }
+                onClicked: {
+                    console.log("右后门按钮被点击, 当前状态:", liXiang_L9.doorBRStatus)
+                    if(liXiang_L9.doorBRStatus)
+                    {
+                        console.log("执行右后门关门动画")
+                        doorBROffAnimation.start()
+                        liXiang_L9.doorBRStatus = false
+                    }
+                    else
+                    {
+                        console.log("执行右后门开门动画")
+                        doorBROnAnimation.start()
+                        liXiang_L9.doorBRStatus = true
+                    }
+                }
             }
             QuickButton {
                 id: trunkButton

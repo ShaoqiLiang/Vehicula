@@ -186,6 +186,108 @@ Window {
                 onStarted: console.log("后备箱关闭动画开始")
                 onFinished: console.log("后备箱关闭动画完成")
             }
+
+            // 车内视角过渡动画
+            ParallelAnimation {
+                id: interiorViewAnimation
+
+                NumberAnimation {
+                    target: sceneCamera
+                    property: "x"
+                    to: -67.7205
+                    duration: 1500
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: sceneCamera
+                    property: "y"
+                    to: 1101.35
+                    duration: 1500
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: sceneCamera
+                    property: "z"
+                    to: 666.678
+                    duration: 1500
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: sceneCamera
+                    property: "eulerRotation.x"
+                    to: -15.5458
+                    duration: 1500
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: sceneCamera
+                    property: "eulerRotation.y"
+                    to: 85.6955
+                    duration: 1500
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: sceneCamera
+                    property: "eulerRotation.z"
+                    to: 0
+                    duration: 1500
+                    easing.type: Easing.InOutQuad
+                }
+
+                onStarted: console.log("车内视角动画开始")
+                onFinished: console.log("车内视角动画完成")
+            }
+
+            // 车身视角过渡动画
+            ParallelAnimation {
+                id: carBodyViewAnimation
+
+                NumberAnimation {
+                    target: sceneCamera
+                    property: "x"
+                    to: 0
+                    duration: 1500
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: sceneCamera
+                    property: "y"
+                    to: 800
+                    duration: 1500
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: sceneCamera
+                    property: "z"
+                    to: 5000
+                    duration: 1500
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: sceneCamera
+                    property: "eulerRotation.x"
+                    to: -5
+                    duration: 1500
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: sceneCamera
+                    property: "eulerRotation.y"
+                    to: 0
+                    duration: 1500
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: sceneCamera
+                    property: "eulerRotation.z"
+                    to: 0
+                    duration: 1500
+                    easing.type: Easing.InOutQuad
+                }
+
+                onStarted: console.log("车身视角动画开始")
+                onFinished: console.log("车身视角动画完成")
+            }
         }
 
         // WasdController 放在 View3D 内部
@@ -219,13 +321,12 @@ Window {
             id: infoLabel
             font.pixelSize: 16
             color: "white"
-            text: "eulerRotation: " + liXiangL9.eulerRotation + "  " +
-                  "scale: " + liXiangL9.scale + "  " +
-                  "position: " + liXiangL9.position + "\n" +
-                  "sceneCamera: " + sceneCamera.eulerRotation + "  " +
-                  "sceneCamera.position: " + sceneCamera.position
-                  // "sceneCamera.position: " + sceneCamera.position + "  " +
-                  // "lightness: " + probeExposureSlider.value.toFixed(1)
+            text: "车身位置: " + liXiang_L9.position + "  " +
+                  "车身旋转: " + liXiang_L9.eulerRotation + "\n" +
+                  "摄像机位置: " + sceneCamera.position + "  " +
+                  "摄像机旋转: " + sceneCamera.eulerRotation + "\n" +
+                  "车漆颜色: " + liXiang_L9.carPaintColor + "  " +
+                  "转向角度: " + liXiang_L9.wheelSteeringAngle
         }
     }
     // *********************************************************************************
@@ -631,9 +732,9 @@ Window {
                 iconSize: Qt.point(16, 16)
                 iconMagin: 3
 
-                // onClicked: {
-                //     carBodyAnimation.start()
-                // }
+                onClicked: {
+                    carBodyViewAnimation.start()
+                }
             }
 
             QuickButton {
@@ -649,9 +750,9 @@ Window {
                 iconSize: Qt.point(16, 16)
                 iconMagin: 3
 
-                // onClicked: {
-                //     carInteriorAnimation.start()
-                // }
+                onClicked: {
+                    interiorViewAnimation.start()
+                }
             }
 
             QuickButton {

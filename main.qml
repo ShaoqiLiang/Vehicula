@@ -854,7 +854,7 @@ Window {
                 width: 80
                 height: 40
                 anchors.verticalCenter: parent.verticalCenter
-                buttonText: (orbitTransitionAnimation.running || orbitOrbitAnimation.running) ? "停止动画" : "播放动画"
+                buttonText: (orbitTransitionAnimation.running || orbitOrbitAnimation.running) ? "停止动画" : "环绕动画"
                 buttonColor: "#80AAAAAA"
                 buttonSource: "qrc:/images/animation.png"
                 textColor: "white"
@@ -1003,9 +1003,9 @@ Window {
                 iconSize: Qt.point(16, 16)
                 iconMagin: 6
 
-                // onClicked: {
-                //     probeExposureControlRow.visible = !probeExposureControlRow.visible
-                // }
+                onClicked: {
+                    probeExposureControlRow.visible = !probeExposureControlRow.visible
+                }
             }
         }
         Row {
@@ -1034,27 +1034,103 @@ Window {
 
             Label {text: wheelSlider.value; color: "white"}
         }
-        Row {
+        Column {
             id: probeExposureControlRow
-            width: 300
-            height: 30
             anchors.left: parent.left
             anchors.leftMargin: 1100
             anchors.bottom: statusBarRect.top
             anchors.bottomMargin: 10
             visible: false
-            spacing: 20
+            spacing: 5
 
-            Label { id: label2; text: "光线强度: "; color: "white"}
+            // 第一行：环境光
+            Row {
+                spacing: 10
+                Label {
+                    text: "环境光: "
+                    color: "white"
+                    font.pixelSize: 14
+                    width: 60
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Slider {
+                    id: probeExposureSlider
+                    width: 200
+                    height: 20
+                    from: 0
+                    to: 5
+                    stepSize: 0.1
+                    value: 1
+                    onMoved: sceneEnvironment.probeExposure = value
+                }
+                Label {
+                    text: probeExposureSlider.value.toFixed(1)
+                    color: "white"
+                    font.pixelSize: 14
+                    width: 30
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+            }
 
-            Slider {
-                id: probeExposureSlider
-                width: 200
-                height: 20
-                from: 0
-                to: 5
-                stepSize: 0.1
-                value: 1
+            // 第二行：平行光
+            Row {
+                spacing: 10
+                Label {
+                    text: "平行光: "
+                    color: "white"
+                    font.pixelSize: 14
+                    width: 60
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Slider {
+                    id: directionalLightSlider
+                    width: 200
+                    height: 20
+                    from: 0
+                    to: 10
+                    stepSize: 0.1
+                    value: 2.0
+                    onMoved: {
+                        directionalLight.brightness = value
+                        liXiang_L9.directionalBrightness = value * 2.62  // 按比例缩放（原始5.24/2.0）
+                    }
+                }
+                Label {
+                    text: directionalLightSlider.value.toFixed(1)
+                    color: "white"
+                    font.pixelSize: 14
+                    width: 30
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+            }
+
+            // 第三行：屏幕光
+            Row {
+                spacing: 10
+                Label {
+                    text: "屏幕光: "
+                    color: "white"
+                    font.pixelSize: 14
+                    width: 60
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Slider {
+                    id: emissiveSlider
+                    width: 200
+                    height: 20
+                    from: 0
+                    to: 1
+                    stepSize: 0.01
+                    value: 1.0
+                    onMoved: liXiang_L9.emissiveFactor = value
+                }
+                Label {
+                    text: emissiveSlider.value.toFixed(2)
+                    color: "white"
+                    font.pixelSize: 14
+                    width: 30
+                    anchors.verticalCenter: parent.verticalCenter
+                }
             }
         }
     }

@@ -27,6 +27,10 @@ Node {
     property real wheelSteeringAngle: 90
     // 车漆颜色（供外部颜色选择器驱动）
     property color carPaintColor: "#ff001314"
+    // 自发光强度（供外部slider驱动，0=熄灭，1=正常）
+    property real emissiveFactor: 1.0
+    // 平行光亮度（供外部slider驱动）
+    property real directionalBrightness: 5.24
 
     // Resources
 
@@ -4012,9 +4016,9 @@ Node {
             objectName: "glass_Lamp"
             roughness: -0.18879568576812744
             normalMap: grid_n_png_texture
-            emissiveFactor.x: 0.172549
-            emissiveFactor.y: 0.172549
-            emissiveFactor.z: 0.172549
+            emissiveFactor.x: 0.172549 * node.emissiveFactor
+            emissiveFactor.y: 0.172549 * node.emissiveFactor
+            emissiveFactor.z: 0.172549 * node.emissiveFactor
         }
 
         PrincipledMaterial {
@@ -4143,6 +4147,9 @@ Node {
             baseColorMap: lx_L9_interior_png_texture
             roughness: -0.18879568576812744
             emissiveMap: lx_L9_interior_png_texture
+            emissiveFactor.x: node.emissiveFactor
+            emissiveFactor.y: node.emissiveFactor
+            emissiveFactor.z: node.emissiveFactor
         }
 
         PrincipledMaterial {
@@ -4260,6 +4267,9 @@ Node {
             roughness: -0.18879568576812744
             normalMap: grid_n_png_texture
             emissiveMap: lightsBMP_jpg_texture
+            emissiveFactor.x: node.emissiveFactor
+            emissiveFactor.y: node.emissiveFactor
+            emissiveFactor.z: node.emissiveFactor
         }
 
         PrincipledMaterial {
@@ -4320,7 +4330,7 @@ Node {
         x: 0
         y: 3000
         eulerRotation.x: 270
-        brightness: 5.24
+        brightness: node.directionalBrightness
         z: 0
     }
 }

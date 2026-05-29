@@ -6,6 +6,16 @@ import QtQuick.Timeline
 Node {
     id: node
 
+    // 门状态属性
+    property bool doorFLStatus: false  // 左前门状态：false=关闭, true=打开
+    property bool doorBLStatus: false
+    property bool doorFRStatus: false
+    property bool doorBRStatus: false
+    property bool trunkStatus: false
+
+    // 左前门开合角度（供外部动画驱动）
+    property real doorFLAngle: 0
+
     // Resources
 
     // Nodes:
@@ -988,50 +998,62 @@ Node {
                     }
                 }
             }
+            // 左前门旋转控制节点
             Node {
-                id: doorFL
-                objectName: "DoorFL"
+                id: doorFLRotator
+                objectName: "DoorFLRotator"
                 x: -1017.096435546875
                 y: -944.8876342773438
                 z: 749.7769165039062
-                rotation: Qt.quaternion(0.707107, 0.707107, -8.42937e-08, -8.42937e-08)
+
+                // 绕竖直轴旋转，角度由根节点 doorFLAngle 驱动
+                eulerRotation.z: -node.doorFLAngle
+
                 Node {
-                    id: handleFL
-                    objectName: "HandleFL"
-                    x: 863.68310546875
-                    y: 261.54486083984375
-                    z: 23.19415283203125
-                    rotation: Qt.quaternion(0.707107, -0.707107, 0, 0)
+                    id: doorFL
+                    objectName: "DoorFL"
+                    x: 0
+                    y: 0
+                    z: 0
+                    rotation: Qt.quaternion(0.707107, 0.707107, -8.42937e-08, -8.42937e-08)
+
                     Node {
-                        id: handleFL187
+                        id: handleFL
                         objectName: "HandleFL"
-                        x: 150
-                        y: 970
-                        z: 0
-                        Model {
-                            id: liXiang_L9_HandleFL_01
-                            objectName: "LiXiang_L9_HandleFL_01"
-                            x: -195.82293701171875
-                            y: 3.65087890625
-                            z: -1046.92041015625
-                            source: "qrc:/LiXiang_L9/meshes/liXiang_L9_HandleFL_01_mesh.mesh"
-                            materials: [
-                                plastic_material
-                            ]
-                        }
-                        Model {
-                            id: liXiang_L9_HandleFL_00
-                            objectName: "LiXiang_L9_HandleFL_00"
-                            x: -195.8229522705078
-                            y: 3.6510009765625
-                            z: -1046.920166015625
-                            source: "qrc:/LiXiang_L9/meshes/liXiang_L9_HandleFL_00_mesh.mesh"
-                            materials: [
-                                carpaint_green_material
-                            ]
+                        x: 863.68310546875
+                        y: 261.54486083984375
+                        z: 23.19415283203125
+                        rotation: Qt.quaternion(0.707107, -0.707107, 0, 0)
+                        Node {
+                            id: handleFL187
+                            objectName: "HandleFL"
+                            x: 150
+                            y: 970
+                            z: 0
+                            Model {
+                                id: liXiang_L9_HandleFL_01
+                                objectName: "LiXiang_L9_HandleFL_01"
+                                x: -195.82293701171875
+                                y: 3.65087890625
+                                z: -1046.92041015625
+                                source: "qrc:/LiXiang_L9/meshes/liXiang_L9_HandleFL_01_mesh.mesh"
+                                materials: [
+                                    plastic_material
+                                ]
+                            }
+                            Model {
+                                id: liXiang_L9_HandleFL_00
+                                objectName: "LiXiang_L9_HandleFL_00"
+                                x: -195.8229522705078
+                                y: 3.6510009765625
+                                z: -1046.920166015625
+                                source: "qrc:/LiXiang_L9/meshes/liXiang_L9_HandleFL_00_mesh.mesh"
+                                materials: [
+                                    carpaint_green_material
+                                ]
+                            }
                         }
                     }
-                }
                 Node {
                     id: liXiang_L9_DoorFL
                     objectName: "LiXiang_L9_DoorFL"
@@ -1269,6 +1291,7 @@ Node {
                             plastic_material
                         ]
                     }
+                }
                 }
             }
             Node {

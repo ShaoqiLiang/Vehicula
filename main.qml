@@ -180,14 +180,14 @@ Window {
                         z: 416
 
                         velocity: VectorDirection3D {
-                            // 速度恒定，不跟随风量变化
-                            direction: Qt.vector3d(200, 0, 0)
+                            // 速度跟随风量：风量越大，速度越快
+                            direction: Qt.vector3d(80 + leftWindIntensity * 250, 0, 0)
                             directionVariation: Qt.vector3d(30, 20, 25)
                         }
                     }
 
                     Gravity3D {
-                        magnitude: 15                            // 减小重力，轨迹更直更长
+                        magnitude: 15
                         direction: Qt.vector3d(50, 0, 0)
                     }
                 }
@@ -225,14 +225,14 @@ Window {
                         z: 307
 
                         velocity: VectorDirection3D {
-                            // 速度恒定，不跟随风量变化
-                            direction: Qt.vector3d(200, 0, 0)
+                            // 速度跟随风量：风量越大，速度越快
+                            direction: Qt.vector3d(80 + rightWindIntensity * 250, 0, 0)
                             directionVariation: Qt.vector3d(30, 20, 25)
                         }
                     }
 
                     Gravity3D {
-                        magnitude: 15                            // 减小重力，轨迹更直更长
+                        magnitude: 15
                         direction: Qt.vector3d(50, 0, 0)
                     }
                 }

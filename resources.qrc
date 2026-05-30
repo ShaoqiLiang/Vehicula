@@ -362,5 +362,6 @@
         <file>images/switch.png</file>
         <file>images/trunk.png</file>
         <file>images/wheel.png</file>
+        <file>images/carlight.png</file>
     </qresource>
 </RCC>

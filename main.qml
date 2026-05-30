@@ -41,6 +41,30 @@ Window {
 
         Node {
             id: scene
+
+            // 坐标轴辅助线
+            AxisHelper {
+                id: axisHelper
+                enableAxisLines: true
+                enableXYGrid: true
+                enableXZGrid: true
+                enableYZGrid: true
+            }
+
+            // // 地面平面（用于观察车灯效果）
+            // Model {
+            //     id: groundPlane
+            //     source: "#Rectangle"
+            //     scale: Qt.vector3d(200, 200, 1)
+            //     eulerRotation.x: -90
+            //     x: -2330
+            //     y: -950  // 地面高度
+            //     materials: PrincipledMaterial {
+            //         baseColor: "gray"
+            //         roughness: 0.8
+            //     }
+            // }
+
             DirectionalLight {
                 id: directionalLight
                 x: -107.292
@@ -1005,6 +1029,35 @@ Window {
 
                 onClicked: {
                     probeExposureControlRow.visible = !probeExposureControlRow.visible
+                }
+            }
+        }
+        Row {
+            id: headlightRow
+            anchors.left: probeExposureRow.right
+            anchors.leftMargin: 5
+            anchors.verticalCenter: parent.verticalCenter
+            width: 70
+            height: 50
+            spacing: 5
+
+            QuickButton {
+                id: headlightButton
+                width: 65
+                height: 40
+                anchors.verticalCenter: parent.verticalCenter
+                buttonText: "前车灯"
+                buttonColor: liXiang_L9.headlightOn ? "#FFCC00" : "#80AAAAAA"
+                buttonSource: "qrc:/images/carlight.png"
+                textColor: "white"
+                font.pixelSize: 14
+                iconSize: Qt.point(16, 16)
+                iconMagin: 6
+
+                onClicked: {
+                    liXiang_L9.headlightOn = !liXiang_L9.headlightOn
+                    console.log("前车灯: " + (liXiang_L9.headlightOn ? "开" : "关"))
+                    liXiang_L9.printHeadlightInfo()
                 }
             }
         }

@@ -31,6 +31,17 @@ Node {
     property real emissiveFactor: 1.0
     // 平行光亮度（供外部slider驱动）
     property real directionalBrightness: 5.24
+    // 前车灯开关
+    property bool headlightOn: false
+    // 车灯位置信息（供调试）
+    function printHeadlightInfo() {
+        console.log("=== 左前车灯 ===")
+        console.log("光源位置: (" + headlightFL.x + ", " + headlightFL.y + ", " + headlightFL.z + ")")
+        console.log("eulerRotation: (" + headlightFL.eulerRotation.x + ", " + headlightFL.eulerRotation.y + ", " + headlightFL.eulerRotation.z + ")")
+        console.log("=== 右前车灯 ===")
+        console.log("光源位置: (" + headlightFR.x + ", " + headlightFR.y + ", " + headlightFR.z + ")")
+        console.log("eulerRotation: (" + headlightFR.eulerRotation.x + ", " + headlightFR.eulerRotation.y + ", " + headlightFR.eulerRotation.z + ")")
+    }
 
     // Resources
 
@@ -4332,6 +4343,80 @@ Node {
         eulerRotation.x: 270
         brightness: node.directionalBrightness
         z: 0
+    }
+
+    // 左前车灯
+    SpotLight {
+        id: headlightFL
+        x: -2330
+        y: 732
+        z: 823
+        color: "#ffff00"
+        brightness: node.headlightOn ? 50 : 0
+        innerConeAngle: 10
+        eulerRotation.x: -10.7
+        eulerRotation.y: 93
+
+        // 光源位置标记（黄色小球）- 已隐藏
+        Model {
+            visible: false
+            source: "#Sphere"
+            scale: Qt.vector3d(1, 1, 1)
+            materials: PrincipledMaterial {
+                baseColor: "yellow"
+                lighting: PrincipledMaterial.NoLighting
+            }
+        }
+
+        // 光束模型（半透明锥体）
+        Model {
+            visible: node.headlightOn
+            source: "#Cone"
+            eulerRotation.x: -90
+            scale: Qt.vector3d(3, 30, 3)
+            materials: PrincipledMaterial {
+                baseColor: "#30ffff00"
+                alphaMode: PrincipledMaterial.Blend
+                lighting: PrincipledMaterial.NoLighting
+            }
+        }
+    }
+
+    // 右前车灯
+    SpotLight {
+        id: headlightFR
+        x: -2315
+        y: 737
+        z: -820
+        color: "#ffff00"
+        brightness: node.headlightOn ? 50 : 0
+        innerConeAngle: 10
+        eulerRotation.x: -10.6
+        eulerRotation.y: 90
+
+        // 光源位置标记（蓝色小球）- 已隐藏
+        Model {
+            visible: false
+            source: "#Sphere"
+            scale: Qt.vector3d(1, 1, 1)
+            materials: PrincipledMaterial {
+                baseColor: "blue"
+                lighting: PrincipledMaterial.NoLighting
+            }
+        }
+
+        // 光束模型（半透明锥体）
+        Model {
+            visible: node.headlightOn
+            source: "#Cone"
+            eulerRotation.x: -90
+            scale: Qt.vector3d(3, 30, 3)
+            materials: PrincipledMaterial {
+                baseColor: "#30ffff00"
+                alphaMode: PrincipledMaterial.Blend
+                lighting: PrincipledMaterial.NoLighting
+            }
+        }
     }
 }
 

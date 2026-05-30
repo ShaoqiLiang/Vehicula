@@ -2,6 +2,7 @@
 import QtQuick.Controls
 import QtQuick3D
 import QtQuick3D.Helpers
+import QtQuick3D.Particles3D
 import "LiXiang_L9"
 
 Window {
@@ -16,6 +17,34 @@ Window {
     property real orbitHeight: 800       // 环绕高度
     property real orbitCenterX: 0        // 车中心X
     property real orbitCenterZ: 500      // 车中心Z
+
+    // 空调相关属性
+    property int leftTemperature: 24
+    property int rightTemperature: 24
+    property bool acPower: false
+    property bool isInteriorView: false   // 是否在内饰视角
+
+    // 风效果强度（0.0 ~ 1.0）
+    property real leftWindIntensity: leftWindSlider.value / 5.0
+    property real rightWindIntensity: rightWindSlider.value / 5.0
+
+    // 当风速变为0或关闭空调时重置粒子系统
+    onLeftWindIntensityChanged: {
+        if (leftWindIntensity <= 0) {
+            leftVentParticles.reset()
+        }
+    }
+    onRightWindIntensityChanged: {
+        if (rightWindIntensity <= 0) {
+            rightVentParticles.reset()
+        }
+    }
+    onAcPowerChanged: {
+        if (!acPower) {
+            leftVentParticles.reset()
+            rightVentParticles.reset()
+        }
+    }
     visibility: Window.FullScreen
     title: qsTr("Vehicula  -by: ShaoqiLiang")
 
@@ -49,6 +78,7 @@ Window {
                 enableXYGrid: true
                 enableXZGrid: true
                 enableYZGrid: true
+                visible: false
             }
 
             // // 地面平面（用于观察车灯效果）
@@ -88,6 +118,124 @@ Window {
                 z: 363.32602
                 scale: Qt.vector3d(0.8, 0.8, 0.8)
             }
+
+            // ==================== 空调风效果粒子系统 ====================
+            Node {
+                id: acWindEffects
+                visible: acPower
+
+                // 调试用：方块标记出风口位置
+                Model {
+                    source: "#Cube"
+                    scale: Qt.vector3d(0.5, 0.1, 0.3)
+                    position: Qt.vector3d(-580, 782, 416)
+                    materials: PrincipledMaterial {
+                        baseColor: "red"
+                        opacity: 0.8
+                    }
+                    visible: acPower
+                }
+
+                Model {
+                    source: "#Cube"
+                    scale: Qt.vector3d(0.5, 0.1, 0.3)
+                    position: Qt.vector3d(-580, 782, 307)
+                    materials: PrincipledMaterial {
+                        baseColor: "blue"
+                        opacity: 0.8
+                    }
+                    visible: acPower
+                }
+
+                // --- 左侧出风口粒子系统 ---
+                ParticleSystem3D {
+                    id: leftVentParticles
+                    running: acPower && leftWindIntensity > 0
+
+                    SpriteParticle3D {
+                        id: leftVentParticle
+                        sprite: Texture { source: "qrc:/images/dust.png" }
+                        maxAmount: 100
+                        color: Qt.rgba(1, 1, 1, 0.4)
+                        colorVariation: Qt.vector4d(0, 0, 0, 0.1)
+                        fadeInDuration: 200
+                        fadeOutDuration: 500
+                        hasTransparency: true
+                        billboard: true
+                        particleScale: 5
+                    }
+
+                    ParticleEmitter3D {
+                        id: leftVentEmitter
+                        particle: leftVentParticle
+                        emitRate: leftWindIntensity * 150      // 发射速率：80→150
+                        lifeSpan: 1200                         // 寿命：2000→1200（更快消散）
+                        lifeSpanVariation: 300
+                        particleScale: 5
+                        particleScaleVariation: 2
+                        particleEndScale: 10
+                        // 出风口位置（仪表台左侧）- 与红色方块一致
+                        x: -580
+                        y: 782
+                        z: 416
+
+                        velocity: VectorDirection3D {
+                            direction: Qt.vector3d(250, 0, 0)          // 朝X轴正方向发射
+                            directionVariation: Qt.vector3d(30, 20, 25)
+                        }
+                    }
+
+                    Gravity3D {
+                        magnitude: 30
+                        direction: Qt.vector3d(80, 0, 0)           // 重力方向也改为X轴正方向
+                    }
+                }
+
+                // --- 右侧出风口粒子系统 ---
+                ParticleSystem3D {
+                    id: rightVentParticles
+                    running: acPower && rightWindIntensity > 0
+
+                    SpriteParticle3D {
+                        id: rightVentParticle
+                        sprite: Texture { source: "qrc:/images/dust.png" }
+                        maxAmount: 100
+                        color: Qt.rgba(1, 1, 1, 0.4)
+                        colorVariation: Qt.vector4d(0, 0, 0, 0.1)
+                        fadeInDuration: 200
+                        fadeOutDuration: 500
+                        hasTransparency: true
+                        billboard: true
+                        particleScale: 5
+                    }
+
+                    ParticleEmitter3D {
+                        id: rightVentEmitter
+                        particle: rightVentParticle
+                        emitRate: rightWindIntensity * 150     // 发射速率：80→150
+                        lifeSpan: 1200                         // 寿命：2000→1200（更快消散）
+                        lifeSpanVariation: 300
+                        particleScale: 5
+                        particleScaleVariation: 2
+                        particleEndScale: 10
+                        // 出风口位置（仪表台右侧）- 与蓝色方块一致
+                        x: -580
+                        y: 782
+                        z: 307
+
+                        velocity: VectorDirection3D {
+                            direction: Qt.vector3d(250, 0, 0)          // 朝X轴正方向发射
+                            directionVariation: Qt.vector3d(30, 20, 25)
+                        }
+                    }
+
+                    Gravity3D {
+                        magnitude: 30
+                        direction: Qt.vector3d(80, 0, 0)           // 重力方向也改为X轴正方向
+                    }
+                }
+            }
+            // ==================== 空调风效果结束 ====================
 
             // 左前门开启动画
             NumberAnimation {
@@ -441,7 +589,10 @@ Window {
                   "摄像机位置: " + sceneCamera.position + "  " +
                   "摄像机旋转: " + sceneCamera.eulerRotation + "\n" +
                   "车漆颜色: " + liXiang_L9.carPaintColor + "  " +
-                  "转向角度: " + liXiang_L9.wheelSteeringAngle
+                  "转向角度: " + liXiang_L9.wheelSteeringAngle + "\n" +
+                  "空调: " + (acPower ? "开启" : "关闭") + "  " +
+                  "左温: " + leftTemperature + "℃  右温: " + rightTemperature + "℃  " +
+                  "左风速: " + leftWindSlider.value + "  右风速: " + rightWindSlider.value
         }
     }
     // *********************************************************************************
@@ -495,6 +646,9 @@ Window {
                         source: "qrc:/images/Arrow_Left.png"
                         fillMode: Image.PreserveAspectFit
                     }
+                    onClicked: {
+                        if (leftTemperature > 16) leftTemperature--
+                    }
                 }
 
                 Label {
@@ -517,6 +671,9 @@ Window {
                         source: "qrc:/images/Arrow_Right.png"
                         fillMode: Image.PreserveAspectFit
                     }
+                    onClicked: {
+                        if (leftTemperature < 32) leftTemperature++
+                    }
                 }
             }
 
@@ -533,6 +690,9 @@ Window {
                         anchors.centerIn: parent
                         source: "qrc:/images/switch.png"
                         fillMode: Image.PreserveAspectFit
+                    }
+                    onClicked: {
+                        acPower = !acPower
                     }
                 }
             }
@@ -552,6 +712,9 @@ Window {
                         anchors.centerIn: parent
                         source: "qrc:/images/Arrow_Left.png"
                         fillMode: Image.PreserveAspectFit
+                    }
+                    onClicked: {
+                        if (rightTemperature > 16) rightTemperature--
                     }
                 }
 
@@ -574,6 +737,9 @@ Window {
                         anchors.centerIn: parent
                         source: "qrc:/images/Arrow_Right.png"
                         fillMode: Image.PreserveAspectFit
+                    }
+                    onClicked: {
+                        if (rightTemperature < 32) rightTemperature++
                     }
                 }
             }
@@ -848,6 +1014,7 @@ Window {
                 iconMagin: 3
 
                 onClicked: {
+                    isInteriorView = false
                     orbitTransitionAnimation.stop()
                     orbitOrbitAnimation.stop()
                     orbitTimer.running = false
@@ -869,6 +1036,9 @@ Window {
                 iconMagin: 3
 
                 onClicked: {
+                    isInteriorView = true
+                    console.log("进入内饰视角, isInteriorView:", isInteriorView)
+                    console.log("左风速强度:", leftWindIntensity, "右风速强度:", rightWindIntensity)
                     interiorViewAnimation.start()
                 }
             }
@@ -896,6 +1066,7 @@ Window {
                     }
                     else
                     {
+                        isInteriorView = false
                         // 计算起始参数
                         var dx = sceneCamera.x - orbitCenterX
                         var dz = sceneCamera.z - orbitCenterZ

@@ -155,11 +155,11 @@ Window {
                     SpriteParticle3D {
                         id: leftVentParticle
                         sprite: Texture { source: "qrc:/images/dust.png" }
-                        maxAmount: 100
+                        maxAmount: 400                           // 增大最大粒子数，保证高风量时寿命一致
                         color: Qt.rgba(1, 1, 1, 0.4)
                         colorVariation: Qt.vector4d(0, 0, 0, 0.1)
-                        fadeInDuration: 200
-                        fadeOutDuration: 500
+                        fadeInDuration: 300
+                        fadeOutDuration: 1000
                         hasTransparency: true
                         billboard: true
                         particleScale: 5
@@ -168,26 +168,27 @@ Window {
                     ParticleEmitter3D {
                         id: leftVentEmitter
                         particle: leftVentParticle
-                        emitRate: leftWindIntensity * 150      // 发射速率：80→150
-                        lifeSpan: 1200                         // 寿命：2000→1200（更快消散）
-                        lifeSpanVariation: 300
+                        emitRate: leftWindIntensity * 150      // 发射速率跟随风量
+                        lifeSpan: 2500                         // 延长寿命，轨迹更长
+                        lifeSpanVariation: 500
                         particleScale: 5
                         particleScaleVariation: 2
-                        particleEndScale: 10
+                        particleEndScale: 8
                         // 出风口位置（仪表台左侧）- 与红色方块一致
                         x: -580
                         y: 782
                         z: 416
 
                         velocity: VectorDirection3D {
-                            direction: Qt.vector3d(250, 0, 0)          // 朝X轴正方向发射
+                            // 速度恒定，不跟随风量变化
+                            direction: Qt.vector3d(200, 0, 0)
                             directionVariation: Qt.vector3d(30, 20, 25)
                         }
                     }
 
                     Gravity3D {
-                        magnitude: 30
-                        direction: Qt.vector3d(80, 0, 0)           // 重力方向也改为X轴正方向
+                        magnitude: 15                            // 减小重力，轨迹更直更长
+                        direction: Qt.vector3d(50, 0, 0)
                     }
                 }
 
@@ -199,11 +200,11 @@ Window {
                     SpriteParticle3D {
                         id: rightVentParticle
                         sprite: Texture { source: "qrc:/images/dust.png" }
-                        maxAmount: 100
+                        maxAmount: 400                           // 增大最大粒子数，保证高风量时寿命一致
                         color: Qt.rgba(1, 1, 1, 0.4)
                         colorVariation: Qt.vector4d(0, 0, 0, 0.1)
-                        fadeInDuration: 200
-                        fadeOutDuration: 500
+                        fadeInDuration: 300
+                        fadeOutDuration: 1000
                         hasTransparency: true
                         billboard: true
                         particleScale: 5
@@ -212,26 +213,27 @@ Window {
                     ParticleEmitter3D {
                         id: rightVentEmitter
                         particle: rightVentParticle
-                        emitRate: rightWindIntensity * 150     // 发射速率：80→150
-                        lifeSpan: 1200                         // 寿命：2000→1200（更快消散）
-                        lifeSpanVariation: 300
+                        emitRate: rightWindIntensity * 150     // 发射速率跟随风量
+                        lifeSpan: 2500                         // 延长寿命，轨迹更长
+                        lifeSpanVariation: 500
                         particleScale: 5
                         particleScaleVariation: 2
-                        particleEndScale: 10
+                        particleEndScale: 8
                         // 出风口位置（仪表台右侧）- 与蓝色方块一致
                         x: -580
                         y: 782
                         z: 307
 
                         velocity: VectorDirection3D {
-                            direction: Qt.vector3d(250, 0, 0)          // 朝X轴正方向发射
+                            // 速度恒定，不跟随风量变化
+                            direction: Qt.vector3d(200, 0, 0)
                             directionVariation: Qt.vector3d(30, 20, 25)
                         }
                     }
 
                     Gravity3D {
-                        magnitude: 30
-                        direction: Qt.vector3d(80, 0, 0)           // 重力方向也改为X轴正方向
+                        magnitude: 15                            // 减小重力，轨迹更直更长
+                        direction: Qt.vector3d(50, 0, 0)
                     }
                 }
             }

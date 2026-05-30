@@ -124,28 +124,28 @@ Window {
                 id: acWindEffects
                 visible: acPower
 
-                // 调试用：方块标记出风口位置
-                Model {
-                    source: "#Cube"
-                    scale: Qt.vector3d(0.5, 0.1, 0.3)
-                    position: Qt.vector3d(-580, 782, 416)
-                    materials: PrincipledMaterial {
-                        baseColor: "red"
-                        opacity: 0.8
-                    }
-                    visible: acPower
-                }
+                // 出风口位置标记（已隐藏）
+                // Model {
+                //     source: "#Cube"
+                //     scale: Qt.vector3d(0.5, 0.1, 0.3)
+                //     position: Qt.vector3d(-580, 782, 416)
+                //     materials: PrincipledMaterial {
+                //         baseColor: "red"
+                //         opacity: 0.8
+                //     }
+                //     visible: false
+                // }
 
-                Model {
-                    source: "#Cube"
-                    scale: Qt.vector3d(0.5, 0.1, 0.3)
-                    position: Qt.vector3d(-580, 782, 307)
-                    materials: PrincipledMaterial {
-                        baseColor: "blue"
-                        opacity: 0.8
-                    }
-                    visible: acPower
-                }
+                // Model {
+                //     source: "#Cube"
+                //     scale: Qt.vector3d(0.5, 0.1, 0.3)
+                //     position: Qt.vector3d(-580, 782, 307)
+                //     materials: PrincipledMaterial {
+                //         baseColor: "blue"
+                //         opacity: 0.8
+                //     }
+                //     visible: false
+                // }
 
                 // --- 左侧出风口粒子系统 ---
                 ParticleSystem3D {

@@ -618,9 +618,9 @@ Window {
                 height: 30
                 anchors.verticalCenter: parent.verticalCenter
 
-                enabled: true
+                enabled: acPower
                 visible: true
-                opacity: enabled ? 1 : 0.3
+                opacity: acPower ? 1 : 0.3
                 imageWidth: 28
                 imageHeight: 8
                 midelSourceOn: "qrc:/images/midelSourceOn.png"
@@ -637,6 +637,7 @@ Window {
                 id: leftTempRow
                 height: 50
                 spacing: 5
+                visible: acPower
 
                 Button {
                     width: 50; height: 50
@@ -704,6 +705,7 @@ Window {
                 id: rightTempRow
                 height: 50
                 spacing: 5
+                visible: acPower
 
                 Button {
                     width: 50; height: 50
@@ -752,9 +754,9 @@ Window {
                 height: 30
                 anchors.verticalCenter: parent.verticalCenter
 
-                enabled: true
+                enabled: acPower
                 visible: true
-                opacity: enabled ? 1 : 0.3
+                opacity: acPower ? 1 : 0.3
                 imageWidth: 28
                 imageHeight: 8
                 midelSourceOn: "qrc:/images/midelSourceOn.png"
